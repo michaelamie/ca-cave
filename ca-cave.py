@@ -25,17 +25,18 @@ try:
   # 50/50 chance that each tile is populated by a '#' symbol
   for row in ROWS:
     for col in COLS:
-      if not (random.randint(1,9) % 2):
+      if random.randint(1, 100) < 40:
         map[row][col] = '#'
 
   # Fill in edges
   for row in ROWS:
     map[row][0] = '#'
+    map[row][1] = '#'
     map[row][len(COLS)-1] = '#'
-
+    map[row][len(COLS)-2] = '#'
   for col in COLS:
     map[0][col] = '#'
-    map[len(ROWS)-1][col] = '#'
+    map[1][col] = '#'
 
   # Draw map before iterations
   for row in ROWS:
@@ -43,38 +44,38 @@ try:
       screen.addch(row, col, map[row][col])
   screen.addstr(len(ROWS), 0, "Initial state")
   screen.refresh()
-  time.sleep(1)
+  time.sleep(.5)
 
   # Iterate cellular automata algorithm
-  for iteration in range(4):
+  for iteration in range(3):
     for row in ROWS:
       for col in COLS:
         count = 0
-
+        # Left column
         if row-1 >= 0 and col-1 >= 0 and map[row-1][col-1] == '#':
           count += 1
         if col-1 >= 0 and map[row][col-1] == '#':
           count += 1
         if row+1 < len(ROWS) and col-1 >= 0 and map[row+1][col-1] == '#':
           count += 1
-
+        # Center column
         if row-1 >= 0 and map[row-1][col] == '#':
-          count += 1
-        if map[row][col] == '#':
           count += 1
         if row+1 < len(ROWS) and map[row+1][col] == '#':
           count += 1
-
+        # Right column
         if row-1 >= 0 and col+1 < len(COLS) and map[row-1][col+1] == '#':
           count += 1
         if col+1 < len(COLS) and map[row][col+1] == '#':
           count += 1
         if row+1 < len(ROWS) and col+1 < len(COLS) and map[row+1][col+1] == '#':
           count += 1
-
-        if count >= 5:
+        # Modify the current cell
+        if map[row][col] == '#' and count >= 4:
           map[row][col] = '#'
-        if count <= 3:
+        elif map[row][col] == ' ' and count >= 5:
+          map[row][col] = '#'
+        elif count <= 2:
           map[row][col] = ' '
 
     # Draw map for each iteration
@@ -83,8 +84,7 @@ try:
         screen.addch(row, col, map[row][col])
     screen.addstr(len(ROWS), 0, "CA iteration: %d" % iteration)
     screen.refresh()
-    time.sleep(1)
-
+    time.sleep(.5)
   screen.getch()
 
 ################################################################################
