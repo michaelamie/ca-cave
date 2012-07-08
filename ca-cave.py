@@ -11,8 +11,8 @@ try:
 ################################################################################
 
   # Values
-  ROWS = range(16)
-  COLS = range(16)
+  ROWS = range(24)
+  COLS = range(60)
 
   # Populate map
   map = []
@@ -25,7 +25,7 @@ try:
   # 50/50 chance that each tile is populated by a '#' symbol
   for row in ROWS:
     for col in COLS:
-      if random.randint(1,2) % 2:
+      if not (random.randint(1,2) % 2):
         map[row][col] = '#'
 
   # Draw map before iterations
@@ -33,7 +33,8 @@ try:
     for col in COLS:
       screen.addch(row, col, map[row][col])
   screen.refresh()
-  screen.getch()
+  time.sleep(1)
+  #screen.getch()
 
   # Iterate cellular automata algorithm
   for iteration in range(4):
@@ -62,12 +63,14 @@ try:
         if row+1 < len(ROWS) and col+1 < len(ROWS) and map[row+1][col+1] == '#':
           count += 1
 
-        if count >= 5:
+        if count > 5:
           map[row][col] = '#'
         elif count <= 3:
           map[row][col] = ' '
 
     # Draw map for each iteration
+    screen.clear()
+    screen.refresh()
     for row in ROWS:
       for col in COLS:
         screen.addch(row, col, map[row][col])
