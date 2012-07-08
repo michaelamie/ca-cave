@@ -56,11 +56,11 @@ try:
         if row+1 < len(ROWS) and map[row+1][col] == '#':
           count += 1
 
-        if row-1 >= 0 and col+1 < len(ROWS) and map[row-1][col+1] == '#':
+        if row-1 >= 0 and col+1 < len(COLS) and map[row-1][col+1] == '#':
           count += 1
-        if col+1 < len(ROWS) and map[row][col+1] == '#':
+        if col+1 < len(COLS) and map[row][col+1] == '#':
           count += 1
-        if row+1 < len(ROWS) and col+1 < len(ROWS) and map[row+1][col+1] == '#':
+        if row+1 < len(ROWS) and col+1 < len(COLS) and map[row+1][col+1] == '#':
           count += 1
 
         if count > 5:
