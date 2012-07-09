@@ -2,12 +2,11 @@
 
 import curses, random, time
 
-def drawMap(map, rows, cols):
+def drawMap(screen, map, rows, cols):
+  screen.clear()
   for row in rows:
     for col in cols:
-      if map[row][col] == False:
-        screen.addch(row, col, ' ')
-      else:
+      if map[row][col] == True:
         screen.addch(row, col, '#')
 
 try:
@@ -33,7 +32,7 @@ try:
   # 50/50 chance that each tile is populated by a wall
   for row in ROWS:
     for col in COLS:
-      if random.randint(1, 100) < 40:
+      if random.randint(1, 100) < 36:
         map[row][col] = True
 
   # Fill in edges
@@ -49,13 +48,13 @@ try:
     map[len(ROWS)-2][col] = True
 
   # Draw map before iterations
-  drawMap(map, ROWS, COLS)
+  drawMap(screen, map, ROWS, COLS)
   screen.addstr(len(ROWS), 0, "Initial state")
   screen.refresh()
-  time.sleep(.5)
+  time.sleep(.1)
 
   # Iterate cellular automata algorithm
-  for iteration in range(3):
+  for iteration in range(10):
     for row in ROWS:
       for col in COLS:
         count = 0
@@ -85,10 +84,10 @@ try:
           map[row][col] = False
 
     # Draw map for each iteration
-    drawMap(map, ROWS, COLS)
+    drawMap(screen, map, ROWS, COLS)
     screen.addstr(len(ROWS), 0, "CA iteration: %d" % iteration)
     screen.refresh()
-    time.sleep(.5)
+    time.sleep(.1)
   screen.getch()
 
 ################################################################################
