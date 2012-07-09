@@ -29,7 +29,7 @@ try:
       new_row.append(False)
     map.append(new_row)
 
-  # 50/50 chance that each tile is populated by a wall
+  # Create initial randomized map
   for row in ROWS:
     for col in COLS:
       if random.randint(1, 100) < 36:
