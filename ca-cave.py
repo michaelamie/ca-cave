@@ -37,7 +37,9 @@ try:
   for col in COLS:
     map[0][col] = '#'
     map[1][col] = '#'
-
+    map[len(ROWS)-1][col] = '#'
+    map[len(ROWS)-2][col] = '#'
+    
   # Draw map before iterations
   for row in ROWS:
     for col in COLS:
@@ -71,11 +73,9 @@ try:
         if row+1 < len(ROWS) and col+1 < len(COLS) and map[row+1][col+1] == '#':
           count += 1
         # Modify the current cell
-        if map[row][col] == '#' and count >= 4:
+        if map[row][col] == ' ' and count >= 5:
           map[row][col] = '#'
-        elif map[row][col] == ' ' and count >= 5:
-          map[row][col] = '#'
-        elif count <= 2:
+        if map[row][col] == '#' and count <= 2:
           map[row][col] = ' '
 
     # Draw map for each iteration
