@@ -45,19 +45,8 @@ try:
   ROWS = range(23)
   COLS = range(80)
 
-  # Populate map
-  map = []
-  for row in ROWS:
-    new_row = []
-    for col in COLS:
-      new_row.append(False)
-    map.append(new_row)
-
-  # Create initial randomized map
-  for row in ROWS:
-    for col in COLS:
-      if random.randint(1, 100) < 36:
-        map[row][col] = True
+  # Populate and randomize map
+  map = [[random.randint(1, 100) < 36 for c in COLS] for r in ROWS]
 
   # Fill in edges
   for row in ROWS:
@@ -78,21 +67,31 @@ try:
   time.sleep(.1)
 
   # Iterate cellular automata algorithm
-  for iteration in range(10):
+  iteration = 0
+  while True:
+    iteration += 1
+    changed = False
     for row in ROWS:
       for col in COLS:
         count = countNeighbors(map, row, col)
         # Modify the current cell
         if map[row][col] == False and count >= 5:
           map[row][col] = True
+          changed = True
         if map[row][col] == True and count <= 2:
           map[row][col] = False
-
+          changed = True
+  
     # Draw map for each iteration
     drawMap(screen, map, ROWS, COLS)
     screen.addstr(len(ROWS), 0, "CA iteration: %d" % iteration)
     screen.refresh()
     time.sleep(.1)
+
+    # Break out of the loop if we've reached equilibrium
+    if not changed:
+        break
+
   screen.getch()
 
 ################################################################################
