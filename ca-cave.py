@@ -9,6 +9,30 @@ def drawMap(screen, map, rows, cols):
       if map[row][col] == True:
         screen.addch(row, col, '#')
 
+def countNeighbors(map, row, col):
+  count = 0
+  # Left column
+  if row-1 >= 0 and col-1 >= 0 and map[row-1][col-1] == True:
+    count += 1
+  if col-1 >= 0 and map[row][col-1] == True:
+    count += 1
+  if row+1 < len(ROWS) and col-1 >= 0 and map[row+1][col-1] == True:
+    count += 1
+  # Center column
+  if row-1 >= 0 and map[row-1][col] == True:
+    count += 1
+  if row+1 < len(ROWS) and map[row+1][col] == True:
+    count += 1
+  # Right column
+  if row-1 >= 0 and col+1 < len(COLS) and map[row-1][col+1] == True:
+    count += 1
+  if col+1 < len(COLS) and map[row][col+1] == True:
+    count += 1
+  if row+1 < len(ROWS) and col+1 < len(COLS) and map[row+1][col+1] == True:
+    count += 1
+  return count
+
+
 try:
   screen = curses.initscr()
   curses.noecho()
@@ -57,26 +81,7 @@ try:
   for iteration in range(10):
     for row in ROWS:
       for col in COLS:
-        count = 0
-        # Left column
-        if row-1 >= 0 and col-1 >= 0 and map[row-1][col-1] == True:
-          count += 1
-        if col-1 >= 0 and map[row][col-1] == True:
-          count += 1
-        if row+1 < len(ROWS) and col-1 >= 0 and map[row+1][col-1] == True:
-          count += 1
-        # Center column
-        if row-1 >= 0 and map[row-1][col] == True:
-          count += 1
-        if row+1 < len(ROWS) and map[row+1][col] == True:
-          count += 1
-        # Right column
-        if row-1 >= 0 and col+1 < len(COLS) and map[row-1][col+1] == True:
-          count += 1
-        if col+1 < len(COLS) and map[row][col+1] == True:
-          count += 1
-        if row+1 < len(ROWS) and col+1 < len(COLS) and map[row+1][col+1] == True:
-          count += 1
+        count = countNeighbors(map, row, col)
         # Modify the current cell
         if map[row][col] == False and count >= 5:
           map[row][col] = True
