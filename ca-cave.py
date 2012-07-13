@@ -45,19 +45,8 @@ try:
   ROWS = range(23)
   COLS = range(80)
 
-  # Populate map
-  map = []
-  for row in ROWS:
-    new_row = []
-    for col in COLS:
-      new_row.append(False)
-    map.append(new_row)
-
-  # Create initial randomized map
-  for row in ROWS:
-    for col in COLS:
-      if random.randint(1, 100) < 36:
-        map[row][col] = True
+  # Populate and randomize map
+  map = [[random.randint(1, 100) < 36 for c in range(80)] for r in range(23)]
 
   # Fill in edges
   for row in ROWS:
