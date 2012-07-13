@@ -46,7 +46,7 @@ try:
   COLS = range(80)
 
   # Populate and randomize map
-  map = [[random.randint(1, 100) < 36 for c in range(80)] for r in range(23)]
+  map = [[random.randint(1, 100) < 36 for c in COLS] for r in ROWS]
 
   # Fill in edges
   for row in ROWS:
