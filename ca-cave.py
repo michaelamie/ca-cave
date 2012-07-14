@@ -9,26 +9,26 @@ def drawMap(screen, map, rows, cols):
       if map[row][col] == True:
         screen.addch(row, col, '#')
 
-def countNeighbors(map, rows, cols, row, col):
+def countNeighbors(map, numRows, numCols, row, col):
   count = 0
   # Left column
   if row-1 >= 0 and col-1 >= 0 and map[row-1][col-1] == True:
     count += 1
   if col-1 >= 0 and map[row][col-1] == True:
     count += 1
-  if row+1 < len(rows) and col-1 >= 0 and map[row+1][col-1] == True:
+  if row+1 < numRows and col-1 >= 0 and map[row+1][col-1] == True:
     count += 1
   # Center column
   if row-1 >= 0 and map[row-1][col] == True:
     count += 1
-  if row+1 < len(rows) and map[row+1][col] == True:
+  if row+1 < numRows and map[row+1][col] == True:
     count += 1
   # Right column
-  if row-1 >= 0 and col+1 < len(cols) and map[row-1][col+1] == True:
+  if row-1 >= 0 and col+1 < numCols and map[row-1][col+1] == True:
     count += 1
-  if col+1 < len(cols) and map[row][col+1] == True:
+  if col+1 < numCols and map[row][col+1] == True:
     count += 1
-  if row+1 < len(rows) and col+1 < len(cols) and map[row+1][col+1] == True:
+  if row+1 < numRows and col+1 < numCols and map[row+1][col+1] == True:
     count += 1
   return count
 
@@ -73,7 +73,7 @@ try:
     changed = False
     for row in rows:
       for col in cols:
-        count = countNeighbors(map, rows, cols, row, col)
+        count = countNeighbors(map, len(rows), len(cols), row, col)
         # Modify the current cell
         if map[row][col] == False and count >= 5:
           map[row][col] = True
