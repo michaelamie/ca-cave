@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
 import curses, random, time
+
 
 def drawMap(screen, map, rows, cols):
   screen.clear()
@@ -32,21 +32,21 @@ def countNeighbors(map, row, col):
     count += 1
   return count
 
+################################################################################
 
+# Set up curses
 try:
   screen = curses.initscr()
   curses.noecho()
   curses.cbreak()
   curses.curs_set(0)
 
-################################################################################
-
   # Values
   ROWS = range(23)
   COLS = range(80)
 
   # Populate and randomize map
-  map = [[random.randint(1, 100) < 36 for c in COLS] for r in ROWS]
+  map = [[random.randint(1, 100) < 36 for col in COLS] for row in ROWS]
 
   # Fill in edges
   for row in ROWS:
@@ -81,7 +81,7 @@ try:
         if map[row][col] == True and count <= 2:
           map[row][col] = False
           changed = True
-  
+
     # Draw map for each iteration
     drawMap(screen, map, ROWS, COLS)
     screen.addstr(len(ROWS), 0, "CA iteration: %d" % iteration)
@@ -94,8 +94,7 @@ try:
 
   screen.getch()
 
-################################################################################
-
+# Restore terminal to regular state
 finally:
   curses.echo()
   curses.nocbreak()
