@@ -19,6 +19,7 @@ def countNeighbors(map, row, col):
     count -= 1
   return count
 
+
 ################################################################################
 
 # Set up curses
