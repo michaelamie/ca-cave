@@ -26,69 +26,68 @@ def addBorders(map, rows, cols):
       map[row][col] = True
 
 
-################################################################################
+if __name__ == '__main__':
+  # Set up curses
+  try:
+    screen = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    curses.curs_set(0)
 
-# Set up curses
-try:
-  screen = curses.initscr()
-  curses.noecho()
-  curses.cbreak()
-  curses.curs_set(0)
+    # Values
+    rows = range(23)
+    cols = range(80)
+    delay = .1
 
-  # Values
-  rows = range(23)
-  cols = range(80)
-  delay = .1
+    # Populate and randomize map
+    map = [[random.randint(1, 100) < 40 for col in cols]
+           for row in rows]
+    addBorders(map, rows, cols)
 
-  # Populate and randomize map
-  map = [[random.randint(1, 100) < 40 for col in cols]
-         for row in rows]
-  addBorders(map, rows, cols)
-
-  # Draw map before iterations
-  drawMap(screen, map, rows, cols)
-  screen.addstr(len(rows), 0, "Initial state")
-  screen.refresh()
-  time.sleep(delay)
-
-  # Iterate cellular automata algorithm
-  iteration = 0
-  while True:
-    iteration += 1
-    changed = False
-
-    # Initialize next map
-    nextMap = [[False for col in cols] for row in rows]
-    addBorders(nextMap, rows, cols)
-
-    # Count the neighbors of each cell and populate next map
-    for row in rows[1:len(rows)-1]:
-      for col in cols[1:len(cols)-1]:
-        count = countNeighbors(map, row, col)
-        # Modify the current cell
-        if map[row][col] == True and count >= 4:
-          nextMap[row][col] = True
-        if map[row][col] == False and count >= 5:
-          nextMap[row][col] = True
-          changed = True
-
-    # Update map
-    map = nextMap
-
-    # Draw map for each iteration
+    # Draw map before iterations
     drawMap(screen, map, rows, cols)
-    screen.addstr(len(rows), 0, "CA iteration: %d" % iteration)
+    screen.addstr(len(rows), 0, "Initial state")
     screen.refresh()
     time.sleep(delay)
 
-    # Break out of the loop if we've reached equilibrium
-    if not changed:
-        break
+    # Iterate cellular automata algorithm
+    iteration = 0
+    while True:
+      iteration += 1
+      changed = False
 
-  screen.getch()
+      # Initialize next map
+      nextMap = [[False for col in cols] for row in rows]
+      addBorders(nextMap, rows, cols)
 
-# Restore terminal to regular state
-finally:
-  curses.echo()
-  curses.nocbreak()
-  curses.endwin()
+      # Count the neighbors of each cell and populate next map
+      for row in rows[1:len(rows)-1]:
+        for col in cols[1:len(cols)-1]:
+          count = countNeighbors(map, row, col)
+          # Modify the current cell
+          if map[row][col] == True and count >= 4:
+            nextMap[row][col] = True
+          if map[row][col] == False and count >= 5:
+            nextMap[row][col] = True
+            changed = True
+
+      # Update map
+      map = nextMap
+
+      # Draw map for each iteration
+      drawMap(screen, map, rows, cols)
+      screen.addstr(len(rows), 0, "CA iteration: %d" % iteration)
+      screen.refresh()
+      time.sleep(delay)
+
+      # Break out of the loop if we've reached equilibrium
+      if not changed:
+          break
+
+    screen.getch()
+
+  # Restore terminal to regular state
+  finally:
+    curses.echo()
+    curses.nocbreak()
+    curses.endwin()
