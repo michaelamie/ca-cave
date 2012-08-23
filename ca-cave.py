@@ -15,6 +15,8 @@ def countNeighbors(map, row, col):
     for x in [col-1, col, col+1]:
       if map[y][x]:
         count += 1
+  if map[row][col]:
+    count -= 1
   return count
 
 ################################################################################
