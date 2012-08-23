@@ -9,27 +9,12 @@ def drawMap(screen, map, rows, cols):
       if map[row][col] == True:
         screen.addch(row, col, '#')
 
-def countNeighbors(map, numRows, numCols, row, col):
+def countNeighbors(map, row, col):
   count = 0
-  # Left column
-  if row-1 >= 0 and col-1 >= 0 and map[row-1][col-1] == True:
-    count += 1
-  if col-1 >= 0 and map[row][col-1] == True:
-    count += 1
-  if row+1 < numRows and col-1 >= 0 and map[row+1][col-1] == True:
-    count += 1
-  # Center column
-  if row-1 >= 0 and map[row-1][col] == True:
-    count += 1
-  if row+1 < numRows and map[row+1][col] == True:
-    count += 1
-  # Right column
-  if row-1 >= 0 and col+1 < numCols and map[row-1][col+1] == True:
-    count += 1
-  if col+1 < numCols and map[row][col+1] == True:
-    count += 1
-  if row+1 < numRows and col+1 < numCols and map[row+1][col+1] == True:
-    count += 1
+  for y in [row-1, row, row+1]:
+    for x in [col-1, col, col+1]:
+      if map[y][x]:
+        count += 1
   return count
 
 ################################################################################
@@ -46,19 +31,16 @@ try:
   cols = range(80)
 
   # Populate and randomize map
-  map = [[random.randint(1, 100) < 36 for col in cols] for row in rows]
+  map = [[random.randint(1, 100) < 36 for col in cols]
+         for row in rows]
 
-  # Fill in edges
+  # Populate borders with walls
   for row in rows:
-    map[row][0] = True
-    map[row][1] = True
-    map[row][len(cols)-1] = True
-    map[row][len(cols)-2] = True
+    for col in [0, len(cols)-1]:
+      map[row][col] = True
   for col in cols:
-    map[0][col] = True
-    map[1][col] = True
-    map[len(rows)-1][col] = True
-    map[len(rows)-2][col] = True
+    for row in [0, len(rows)-1]:
+      map[row][col] = True
 
   # Draw map before iterations
   drawMap(screen, map, rows, cols)
@@ -71,9 +53,9 @@ try:
   while True:
     iteration += 1
     changed = False
-    for row in rows:
-      for col in cols:
-        count = countNeighbors(map, len(rows), len(cols), row, col)
+    for row in rows[1:len(rows)-1]:
+      for col in cols[1:len(cols)-1]:
+        count = countNeighbors(map, row, col)
         # Modify the current cell
         if map[row][col] == False and count >= 5:
           map[row][col] = True
