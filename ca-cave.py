@@ -2,28 +2,28 @@
 import curses, random, time
 
 
-def drawMap(screen, map, rows, cols):
+def drawMap(screen, theMap, rows, cols):
   screen.clear()
   for row in rows:
     for col in cols:
-      if map[row][col] == True:
+      if theMap[row][col] == True:
         screen.addch(row, col, '#')
 
-def countNeighbors(map, row, col):
+def countNeighbors(theMap, row, col):
   count = 0
   for y in [row-1, row, row+1]:
     for x in [col-1, col, col+1]:
-      if map[y][x]:
+      if theMap[y][x]:
         count += 1
   return count
 
-def addBorders(map, rows, cols):
+def addBorders(theMap, rows, cols):
   for row in rows:
     for col in [0, len(cols)-1]:
-      map[row][col] = True
+      theMap[row][col] = True
   for col in cols:
     for row in [0, len(rows)-1]:
-      map[row][col] = True
+      theMap[row][col] = True
 
 
 if __name__ == '__main__':
@@ -40,12 +40,12 @@ if __name__ == '__main__':
     delay = .1
 
     # Populate and randomize map
-    map = [[random.randint(1, 100) < 40 for col in cols]
+    caveMap = [[random.randint(1, 100) < 40 for col in cols]
            for row in rows]
-    addBorders(map, rows, cols)
+    addBorders(caveMap, rows, cols)
 
     # Draw map before iterations
-    drawMap(screen, map, rows, cols)
+    drawMap(screen, caveMap, rows, cols)
     screen.addstr(len(rows), 0, "Initial state")
     screen.refresh()
     time.sleep(delay)
@@ -63,19 +63,19 @@ if __name__ == '__main__':
       # Count the neighbors of each cell and populate next map
       for row in rows[1:len(rows)-1]:
         for col in cols[1:len(cols)-1]:
-          count = countNeighbors(map, row, col)
+          count = countNeighbors(caveMap, row, col)
           # Modify the current cell
-          if map[row][col] == True and count >= 4:
+          if caveMap[row][col] == True and count >= 4:
             nextMap[row][col] = True
-          if map[row][col] == False and count >= 5:
+          if caveMap[row][col] == False and count >= 5:
             nextMap[row][col] = True
             changed = True
 
       # Update map
-      map = nextMap
+      caveMap = nextMap
 
       # Draw map for each iteration
-      drawMap(screen, map, rows, cols)
+      drawMap(screen, caveMap, rows, cols)
       screen.addstr(len(rows), 0, "CA iteration: %d" % iteration)
       screen.refresh()
       time.sleep(delay)
